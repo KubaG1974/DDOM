@@ -1,10 +1,9 @@
 <?php
 class userValidator {
     
-    public function validateEmail(string $email): bool {
-        
-        $pattern = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
-        return (bool)preg_match($pattern, $email);  
+public function validateEmail(string $email): bool {
+    
+    return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
 
     }
 
