@@ -19,3 +19,10 @@ class userValidator {
     }
 
 }
+/* Poniżej metoda validatePassword w wersji "kompaktowej", jednak ze względu na czytelność kodu dla mniej zorientowanych
+   zostawiłem wersję, jak wyżej. Łatwiej również debugować tak napisany kod.
+ 
+   public function validatePassword(string $password): bool {
+      return (bool) preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password);
+    }*/
+
