@@ -10,27 +10,11 @@ class userValidator {
 
     public function validatePassword(string $password): bool {
         
-        if (strlen($password < 8)) {
-            return false;
-        }
-
-       if (!preg_match('/[A-Z]/', $password)) {
-            return false;
-        }
-
-        if (!preg_match('/[a-z]/', $password)) {
-            return false;
-        }
-
-        if (!preg_match('/\d/', $password)) {
-            return false;
-        }
-
-        if (!preg_match('/[\W_]/', $password)) {
-            return false;
-        }
-
-        return true;        
+        return strlen($password) >= 8 &&
+           preg_match('/[A-Z]/', $password) &&
+           preg_match('/[a-z]/', $password) &&
+           preg_match('/\d/', $password) &&
+           preg_match('/[\W_]/', $password);
         
     }
 
