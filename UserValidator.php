@@ -1,3 +1,4 @@
+<?php
 class userValidator {
     
     public function validateEmail(string $email): bool {
@@ -9,3 +10,4 @@ class userValidator {
     }
 
 }
+?>
