@@ -78,20 +78,16 @@
 
 <div class="container">
     <h2>User Validation</h2>
-    <form method="POST" action="">
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" value="<?php echo isset($password) ? htmlspecialchars($password) : ''; ?>" required>
-        </div>
-        <button type="submit" class="btn">Validate</button>
-    </form>
 
     <?php
+    // Upewnij się, że klasa UserValidator jest załadowana
     require 'UserValidator.php';
+
+    // Inicjalizacja zmiennych dla emaila i hasła
+    $email = '';
+    $password = '';
+    $emailValid = true;
+    $passwordValid = true;
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $validator = new UserValidator();
@@ -115,6 +111,18 @@
         }
     }
     ?>
+
+    <form method="POST" action="">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>" required>
+        </div>
+        <button type="submit" class="btn">Validate</button>
+    </form>
 </div>
 
 </body>
