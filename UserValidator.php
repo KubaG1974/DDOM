@@ -1,5 +1,5 @@
 <?php
-class userValidator {
+class UserValidator {
     
 public function validateEmail(string $email): bool {
     
