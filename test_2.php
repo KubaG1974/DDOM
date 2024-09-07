@@ -8,6 +8,7 @@ $emailValid = true;
 $passwordValid = true;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $validator = new UserValidator();
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -16,21 +17,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $passwordValid = $validator->validatePassword($password);
 
     if ($emailValid && $passwordValid) {
+
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['email' => $email, 'password' => $hashedPassword]);
 
         echo '<div class="message success">User added successfully!</div>';
+
     } else {
+
         echo '<div class="message error">';
+
         if (!$emailValid) {
+
             echo 'Invalid email format.<br>';
+
         }
         if (!$passwordValid) {
+
             echo 'Password does not meet the requirements.<br>';
+
         }
+
         echo '</div>';
+
     }
 }
 ?>
@@ -74,7 +85,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php
         $sql = "SELECT * FROM users";
         $stmt = $pdo->query($sql);
+
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row['id']) . "</td>";
             echo "<td>" . htmlspecialchars($row['email']) . "</td>";
@@ -83,8 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<a href='delete.php?id=" . $row['id'] . "'>Delete</a>";
             echo "</td>";
             echo "</tr>";
+
         }
         ?>
+        
     </table>
 </div>
 

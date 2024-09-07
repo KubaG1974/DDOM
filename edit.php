@@ -9,6 +9,7 @@ $emailValid = true;
 $passwordValid = true;
 
 if (isset($_GET['id'])) {
+
     $id = $_GET['id'];
     $sql = "SELECT * FROM users WHERE id = :id";
     $stmt = $pdo->prepare($sql);
@@ -23,6 +24,7 @@ if (isset($_GET['id'])) {
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
         $email = $_POST['email'];
         $password = $_POST['password'];
 
@@ -50,9 +52,10 @@ if (isset($_GET['id'])) {
             exit;
 
         } else {
-            $message = '<div class="message error">';
-            if (!$emailValid) {
 
+            $message = '<div class="message error">';
+            
+            if (!$emailValid) {
 
                 $message .= 'Invalid email format.<br>';
             }
@@ -61,7 +64,9 @@ if (isset($_GET['id'])) {
                 $message .= 'Password does not meet the requirements.<br>';
 
             }
+
             $message .= '</div>';
+            
         }
     }
 }
