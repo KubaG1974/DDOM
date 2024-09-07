@@ -1,5 +1,5 @@
 <?php
-$host = 'localhost';
+$host = 'mysql8';
 $dbname = '38299344_ddom'; 
 $username = '38299344_ddom'; 
 $password = 'SuperT@jne!';
