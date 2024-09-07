@@ -59,6 +59,7 @@ if (isset($_GET['id'])) {
 
                 $message .= 'Invalid email format.<br>';
             }
+            
             if (!$passwordValid) {
 
                 $message .= 'Password does not meet the requirements.<br>';
