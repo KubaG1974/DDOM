@@ -80,10 +80,9 @@
     <h2>User Validation</h2>
 
     <?php
-    // Upewnij się, że klasa UserValidator jest załadowana
+    
     require 'UserValidator.php';
 
-    // Inicjalizacja zmiennych dla emaila i hasła
     $email = '';
     $password = '';
     $emailValid = true;
