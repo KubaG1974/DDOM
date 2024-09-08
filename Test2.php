@@ -77,7 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h2>Users List</h2>
     <table>
         <tr>
-            <th>ID</th>
             <th>Email</th>
             <th>Actions</th>
         </tr>
@@ -89,7 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
             echo "<tr>";
-            echo "<td>" . htmlspecialchars($row['id']) . "</td>";
             echo "<td>" . htmlspecialchars($row['email']) . "</td>";
             echo "<td>";
             echo "<a href='edit.php?id=" . $row['id'] . "'>Edit</a> | ";
