@@ -118,7 +118,6 @@ if (isset($_GET['id'])) {
         foreach ($users as $user) {
 
             echo "<tr>";
-            echo "<td>" . htmlspecialchars($user['id']) . "</td>";
             echo "<td>" . htmlspecialchars($user['email']) . "</td>";
             echo "<td>";
             echo "<a href='Test3.php?id=" . $user['id'] . "'>Edit</a> | ";
