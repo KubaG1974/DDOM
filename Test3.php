@@ -3,8 +3,10 @@ require 'Database.php';
 require 'User.php';
 require 'UserValidator.php';
 
-$userObj = new User($pdo);
+$database = new Database();
+$pdo = $database->getConnection();
 
+$userObj = new User($pdo);
 $message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -106,13 +108,12 @@ if (isset($_GET['id'])) {
     <h2>Users List</h2>
     <table>
         <tr>
-            <th>ID</th>
             <th>Email</th>
             <th>Actions</th>
         </tr>
 
         <?php
-        $users = $userObj->getAllUsers();
+        $users = $userObj->getUsers();
 
         foreach ($users as $user) {
 
@@ -126,7 +127,7 @@ if (isset($_GET['id'])) {
             echo "</tr>";
 
         }
-                ?>
+        ?>
     </table>
 </div>
 
