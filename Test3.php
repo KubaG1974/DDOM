@@ -1,76 +1,134 @@
 <?php
 require 'Database.php';
-require 'UserValidator.php';
 require 'User.php';
+require 'UserValidator.php';
 
-$db = new Database();
-$pdo = $db->getConnection();
-$user = new User($pdo);
+$userObj = new User($pdo);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$message = '';
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if (isset($_POST['id'])) {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-        $user->editUser((int)$_POST['id'], $email, $password);
+    $validator = new UserValidator();
+    $emailValid = $validator->validateEmail($email);
+    $passwordValid = $validator->validatePassword($password);
+
+    if ($emailValid && $passwordValid) {
+
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+        if (isset($_POST['user_id']) && !empty($_POST['user_id'])) {
+
+            $userObj->updateUser($_POST['user_id'], $email, $hashedPassword);
+            $message = '<div class="message success">User updated successfully!</div>';
+
+        } else {
+
+            $userObj->addUser($email, $hashedPassword);
+            $message = '<div class="message success">User added successfully!</div>';
+
+        }
 
     } else {
 
-        $user->addUser($email, $password);
+        $message = '<div class="message error">';
 
+        if (!$emailValid) {
+
+            $message .= 'Invalid email format.<br>';
+
+        }
+
+        if (!$passwordValid) {
+
+            $message .= 'Password does not meet the requirements.<br>';
+
+        }
+
+        $message .= '</div>';
     }
-    
 }
 
-$users = $user->getUsers();
+if (isset($_GET['delete_id'])) {
+
+    $userObj->deleteUser($_GET['delete_id']);
+    header("Location: Test3.php");
+    exit;
+
+}
+
+$editUser = null;
+
+if (isset($_GET['id'])) {
+
+    $editUser = $userObj->getUserById($_GET['id']);
+
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Validation Form</title>
+    <title>User Management</title>
     <link rel="stylesheet" href="stylesheet.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 </head>
 <body>
-    <div class="container">
-        <h2>Add/Edit User</h2>
-        <form method="POST">
-            <input type="hidden" name="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
-            <div>
-                <label>Email:</label>
-                <input type="email" name="email" required>
-            </div>
-            <div>
-                <label>Password:</label>
-                <input type="password" name="password" required>
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-        
-        <h2>Users List</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($users as $user) : ?>
-                    <tr>
-                        <td><?php echo $user['email']; ?></td>
-                        <td>
-                            <a href="index.php?id=<?php echo $user['id']; ?>">Edit</a> | 
-                            <a href="delete.php?id=<?php echo $user['id']; ?>">Delete</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+
+<div class="container">
+    <h2>User Management</h2>
+
+    <?php echo $message; ?>
+
+    <form method="POST" action="Test3.php">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($editUser['email'] ?? ''); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="" required>
+        </div>
+        <?php if ($editUser): ?>
+            <input type="hidden" name="user_id" value="<?php echo $editUser['id']; ?>">
+        <?php endif; ?>
+        <button type="submit" class="btn"><?php echo $editUser ? 'Update User' : 'Add User'; ?></button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Users List</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+
+        <?php
+        $users = $userObj->getAllUsers();
+
+        foreach ($users as $user) {
+
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($user['id']) . "</td>";
+            echo "<td>" . htmlspecialchars($user['email']) . "</td>";
+            echo "<td>";
+            echo "<a href='Test3.php?id=" . $user['id'] . "'>Edit</a> | ";
+            echo "<a href='Test3.php?delete_id=" . $user['id'] . "' onclick=\"return confirm('Are you sure you want to delete this user?')\">Delete</a>";
+            echo "</td>";
+            echo "</tr>";
+
+        }
+                ?>
+    </table>
+</div>
+
 </body>
 </html>
