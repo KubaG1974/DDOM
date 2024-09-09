@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (isset($_POST['user_id']) && !empty($_POST['user_id'])) {
 
-            $userObj->updateUser($_POST['user_id'], $email, $hashedPassword);
+            $userObj->editUser($_POST['user_id'], $email, $hashedPassword);
             $message = '<div class="message success">User updated successfully!</div>';
 
         } else {
@@ -66,7 +66,7 @@ $editUser = null;
 
 if (isset($_GET['id'])) {
 
-    $editUser = $userObj->getUserById($_GET['id']);
+    $editUser = $userObj->getUser($_GET['id']);
 
 }
 
